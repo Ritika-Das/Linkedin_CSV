@@ -1,4 +1,33 @@
-// window.location.assign = 'https://www.linkedin.com/mynetwork/invitation-manager/sent/';
+const puppeteer = require("puppeteer");
+
+(async () => {
+    const browser = await puppeteer.launch({
+        headless: false
+    });
+
+const page = await browser.newPage();
+const navigationPromise = page.waitForNavigation();
+await page.goto("https://www.linkedin.com/uas/login?fromSignIn=true&trk=cold_join_sign_in/");
+await navigationPromise;
+
+// Email for Log-in
+const email = await page.waitForSelector('input[type="text"]');
+await email.click();
+await navigationPromise;
+await page.keyboard.type(`EMAIL_ID_HERE`, { delay: 300 }); // replace EMAIL_ID_HERE with your actual email, e.g. xyz@gmail.com
+
+// Password for Log-in
+const password = await page.waitForSelector('input[type="password"]');
+await password.click();
+await navigationPromise;
+await page.keyboard.type(`SECRET_PASSWORD_HERE`, {delay: 200 }); // replace SECRET_PASSWORD_HERE with your actual LinkedIn password
+
+// Signing in
+await page.keyboard.press(`Enter`, {delay: 200 });
+await navigationPromise;
+
+// Invitations
+await page.goto("https://www.linkedin.com/mynetwork/invitation-manager/sent/");
 
 var i, ii, j;
 let persons = {
@@ -25,3 +54,5 @@ var csv = 'Name,About,Link\n';
 csv = person.join('\n');
 
 console.log(csv);
+
+})();
